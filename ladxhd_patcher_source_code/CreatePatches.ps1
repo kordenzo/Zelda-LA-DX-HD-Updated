@@ -124,6 +124,10 @@ function GetOldFilePath([object]$File, [string]$RelativePath)
 	if ($File.BaseName -eq "menuBackgroundAlt")
 	{
 		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\menuBackground.xnb")
+	}	
+  if ($File.BaseName -eq "smallFont_vwf")
+	{
+		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
 	}
 	return Join-Path $OldGamePath $RelativePath
 }
