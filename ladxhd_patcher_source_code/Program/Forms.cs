@@ -21,35 +21,54 @@ namespace LADXHD_Patcher
             // Set the title including the version number.
             mainDialog.Text = "Link's Awakening DX HD Patcher v" + Config.version;
 
-            // A transparent label is used to overlap the Advanced Rich Textbox so it can't be interacted with.
-            mainDialog.TextBox_NoClick = new TransparentLabel();
-            mainDialog.TextBox_NoClick.Text = "";
-            mainDialog.TextBox_NoClick.Size = new Size(307, 100);
-            mainDialog.TextBox_NoClick.Location = new Point(13, 133);
-            mainDialog.TextBox_NoClick.TabIndex = 16;
-            mainDialog.Controls.Add(mainDialog.TextBox_NoClick);
+            // Transparent overlay label
+            mainDialog.TextBox_NoClick = new TransparentLabel
+            {
+                Text      = "",
+                Size      = new Size(296, 114),
+                Location  = new Point(10, 14),
+                TabIndex  = 16
+            };
+            mainDialog.groupBox_Main.Controls.Add(mainDialog.TextBox_NoClick);
 
             // The Advanced RichTextBox allows for justified text.
-            mainDialog.TextBox_Info = new AdvRichTextBox();
+            mainDialog.TextBox_Info = new AdvRichTextBox
+            {
+                Size        = new Size(296, 114),
+                Location    = new Point(10, 14),
+                TabStop     = false,
+                BorderStyle = BorderStyle.None,
+                ReadOnly    = true,
+                BackColor   = ColorTranslator.FromHtml("#F0F0F0")
+            };
 
-            // Set the text of the textbox.
-            mainDialog.TextBox_Info.Text = "" +
-            "Patches v1.0.0 (or v1.1.4+) to v" + Config.version + " with the \"Patch\" button " +
-            "below. All patchers created since v1.1.4 back up the original " +
-            "files so future  patches no longer require v1.0.0. When updating " +
-            "with this version of the patcher, future versions of the " +
-            "patcher can use the stored backup files. Backups are stored in the " +
-            "\"Data\\Backup\" folder. Do not move or delete them! ";
+            // Build text
+            string header = "The Legend of Zelda: Link's Awakening DX v" + Config.version;
+            string body   =
+                "\n\nPatches v1.0.0 (or v1.1.4+) to v" + Config.version + " with the \"Patch\" button " +
+                "below. All patchers created since v1.1.4 back up the original " +
+                "files so that all future patches no longer require v1.0.0. When updating " +
+                "with this version of the patcher, future versions of the " +
+                "patcher can use the stored backup files. Backups are stored in the " +
+                "\"Data\\Backup\" folder. Do not move or delete them! ";
 
-            // Justification must be done after the text has been added for it to take effect.
+            mainDialog.TextBox_Info.Text = header + body;
+
+            // ----- Bold the header -----
+            mainDialog.TextBox_Info.Select(0, header.Length);
+            mainDialog.TextBox_Info.SelectionFont = new Font(
+                mainDialog.TextBox_Info.Font, FontStyle.Bold);
+
+            // Reset selection so the rest of the text is not bold
+            mainDialog.TextBox_Info.Select(mainDialog.TextBox_Info.TextLength, 0);
+            mainDialog.TextBox_Info.SelectionFont = new Font(
+                mainDialog.TextBox_Info.Font, FontStyle.Regular);
+
+            // Apply justification after text is added
             mainDialog.TextBox_Info.SelectionAlignment = TextAlign.Justify;
-            mainDialog.TextBox_Info.Size = new Size(307, 100);
-            mainDialog.TextBox_Info.Location = new Point(13, 133);
-            mainDialog.TextBox_Info.TabStop = false;
-            mainDialog.TextBox_Info.BorderStyle = BorderStyle.None;
-            mainDialog.TextBox_Info.ReadOnly = true;
-            mainDialog.TextBox_Info.BackColor = ColorTranslator.FromHtml("#F0F0F0");
-            mainDialog.Controls.Add(mainDialog.TextBox_Info);
+
+            // Add to form
+            mainDialog.groupBox_Main.Controls.Add(mainDialog.TextBox_Info);
         }
     }
 }

@@ -32,13 +32,14 @@
             this.button_Patch = new System.Windows.Forms.Button();
             this.button_Exit = new System.Windows.Forms.Button();
             this.button_ChangeLog = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.picturebox_Main = new System.Windows.Forms.PictureBox();
+            this.groupBox_Main = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.picturebox_Main)).BeginInit();
             this.SuspendLayout();
             // 
             // button_Patch
             // 
-            this.button_Patch.Location = new System.Drawing.Point(9, 222);
+            this.button_Patch.Location = new System.Drawing.Point(9, 384);
             this.button_Patch.Name = "button_Patch";
             this.button_Patch.Size = new System.Drawing.Size(100, 30);
             this.button_Patch.TabIndex = 0;
@@ -48,7 +49,7 @@
             // 
             // button_Exit
             // 
-            this.button_Exit.Location = new System.Drawing.Point(225, 222);
+            this.button_Exit.Location = new System.Drawing.Point(225, 384);
             this.button_Exit.Name = "button_Exit";
             this.button_Exit.Size = new System.Drawing.Size(100, 30);
             this.button_Exit.TabIndex = 1;
@@ -58,7 +59,7 @@
             // 
             // button_ChangeLog
             // 
-            this.button_ChangeLog.Location = new System.Drawing.Point(117, 222);
+            this.button_ChangeLog.Location = new System.Drawing.Point(117, 384);
             this.button_ChangeLog.Name = "button_ChangeLog";
             this.button_ChangeLog.Size = new System.Drawing.Size(100, 30);
             this.button_ChangeLog.TabIndex = 3;
@@ -66,23 +67,33 @@
             this.button_ChangeLog.UseVisualStyleBackColor = true;
             this.button_ChangeLog.Click += new System.EventHandler(this.button_ChangeLog_Click);
             // 
-            // pictureBox1
+            // picturebox_Main
             // 
-            this.pictureBox1.ErrorImage = global::LADXHD_Patcher.Properties.Resources.la;
-            this.pictureBox1.Image = global::LADXHD_Patcher.Properties.Resources.la;
-            this.pictureBox1.InitialImage = global::LADXHD_Patcher.Properties.Resources.la;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(334, 123);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.picturebox_Main.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.picturebox_Main.ErrorImage = global::LADXHD_Patcher.Properties.Resources.la;
+            this.picturebox_Main.Image = global::LADXHD_Patcher.Properties.Resources.la;
+            this.picturebox_Main.InitialImage = global::LADXHD_Patcher.Properties.Resources.la;
+            this.picturebox_Main.Location = new System.Drawing.Point(9, 0);
+            this.picturebox_Main.Name = "picturebox_Main";
+            this.picturebox_Main.Size = new System.Drawing.Size(316, 241);
+            this.picturebox_Main.TabIndex = 4;
+            this.picturebox_Main.TabStop = false;
+            // 
+            // groupBox_Main
+            // 
+            this.groupBox_Main.Location = new System.Drawing.Point(9, 247);
+            this.groupBox_Main.Name = "groupBox_Main";
+            this.groupBox_Main.Size = new System.Drawing.Size(316, 130);
+            this.groupBox_Main.TabIndex = 5;
+            this.groupBox_Main.TabStop = false;
             // 
             // Form_MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 261);
-            this.Controls.Add(this.pictureBox1);
+            this.ClientSize = new System.Drawing.Size(335, 423);
+            this.Controls.Add(this.groupBox_Main);
+            this.Controls.Add(this.picturebox_Main);
             this.Controls.Add(this.button_ChangeLog);
             this.Controls.Add(this.button_Exit);
             this.Controls.Add(this.button_Patch);
@@ -94,7 +105,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Link\'s Awakening DX HD Patcher vX.X.X";
             this.Load += new System.EventHandler(this.Form_MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picturebox_Main)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -103,7 +114,8 @@
         private System.Windows.Forms.Button button_Patch;
         private System.Windows.Forms.Button button_Exit;
         private System.Windows.Forms.Button button_ChangeLog;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox picturebox_Main;
+        public System.Windows.Forms.GroupBox groupBox_Main;
     }
 }
 

@@ -571,6 +571,16 @@ namespace LADXHD_Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] items_redux_png {
+            get {
+                object obj = ResourceManager.GetObject("items_redux.png", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap la {
@@ -646,6 +656,46 @@ namespace LADXHD_Patcher.Properties {
         internal static byte[] newHeaderFont_xnb {
             get {
                 object obj = ResourceManager.GetObject("newHeaderFont.xnb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] npc_hippo_ani {
+            get {
+                object obj = ResourceManager.GetObject("npc_hippo.ani", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] npcs_atlas {
+            get {
+                object obj = ResourceManager.GetObject("npcs.atlas", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] npcs_png {
+            get {
+                object obj = ResourceManager.GetObject("npcs.png", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] npcs_redux_png {
+            get {
+                object obj = ResourceManager.GetObject("npcs_redux.png", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -746,6 +796,36 @@ namespace LADXHD_Patcher.Properties {
         internal static byte[] ShockEffect_xnb {
             get {
                 object obj = ResourceManager.GetObject("ShockEffect.xnb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smallFont_redux_xnb {
+            get {
+                object obj = ResourceManager.GetObject("smallFont_redux.xnb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smallFont_vwf_redux_xnb {
+            get {
+                object obj = ResourceManager.GetObject("smallFont_vwf_redux.xnb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smallFont_vwf_xnb {
+            get {
+                object obj = ResourceManager.GetObject("smallFont_vwf.xnb", resourceCulture);
                 return ((byte[])(obj));
             }
         }

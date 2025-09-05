@@ -60,16 +60,16 @@ namespace LADXHD_Patcher
             }
         }
 
-        private static string[] specialFile   = new[] {    "menuBackground",       "npcs",       "items" };
-        private static string[] specialTarget = new[] { "menuBackgroundAlt", "npcs_redux", "items_redux" };
+        private static string[] specialFile   = new[] {    "menuBackground.xnb",       "npcs.png",       "items.png" };
+        private static string[] specialTarget = new[] { "menuBackgroundAlt.xnb", "npcs_redux.png", "items_redux.png" };
         private static void HandleSpecialCases(FileItem fileItem)
         {
             // The "specialFile" array contains files that have alternate variations.
-            if (specialFile.Contains(fileItem.BaseName))
+            if (specialFile.Contains(fileItem.Name))
             {
                 // Use the index of the file in the "specialFile" array to pull the target out of "specialTarget" array.
-                int index = Array.IndexOf(specialFile, fileItem.BaseName);
-                string sFile = specialTarget[index] + fileItem.Extension;
+                int index = Array.IndexOf(specialFile, fileItem.Name);
+                string sFile = specialTarget[index];
 
                 // Create the patched file.
                 string xdelta3File = Path.Combine((Config.tempFolder + "\\patches").CreatePath(), sFile + ".xdelta");
@@ -87,10 +87,13 @@ namespace LADXHD_Patcher
                 FileItem fileItem = new FileItem(file);
                 FileItem folderItem = new FileItem(fileItem.DirectoryName);
 
+                // If we have a file that is required to create an alternate version of the file.
+                HandleSpecialCases(fileItem);
+
                 // We skip backup files and languages other than english here as they are patched from english files. We
                 // also skip the xdelta3 executable for obvious reasons, and we skip the file if there is no patch for it.
                 if (languageFiles.Contains(fileItem.BaseName) || languageDialog.Contains(fileItem.BaseName) ||
-                    folderItem.Name == "Backup" || fileItem.Name == "xdelta3.exe" || !resources.ContainsKey(fileItem.Name) )
+                    folderItem.Name == "Backup" || fileItem.Name == "xdelta3.exe" || (!resources.ContainsKey(fileItem.Name)))
                     continue;
 
                 // If a backup file exists, restore it. If it doesn't exist, create one.
@@ -106,9 +109,6 @@ namespace LADXHD_Patcher
 
                 // There are multiple variations of the small font to create.
                 HandleSmallFonts(fileItem);
-
-                // If we have a file that is required to create an alternate version of the file.
-                HandleSpecialCases(fileItem);
 
                 // Create the patched file.
                 string xdelta3File = Path.Combine((Config.tempFolder + "\\patches").CreatePath(), fileItem.Name + ".xdelta");

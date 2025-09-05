@@ -39,7 +39,7 @@
 
 $OldGamePath = "C:\Users\Bighead\source\repos\Zelda-LA-DX-HD_Stuff\original"
 $NewGamePath = "C:\Users\Bighead\source\repos\Zelda-LA-DX-HD_Stuff\updated"
-$GameVersion = "1.1.9"
+$GameVersion = "1.2.0"
 
 #========================================================================================================================================
 # SETUP XDELTA & OUTPUTS
@@ -121,27 +121,27 @@ function CheckCreateLanguageFiles([object]$File)
 #========================================================================================================================================
 function GetOldFilePath([object]$File, [string]$RelativePath)
 {
-	if ($File.BaseName -eq "menuBackgroundAlt")
+	if ($File.Name -eq "menuBackgroundAlt.xnb")
 	{
 		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\menuBackground.xnb")
 	}	
-  if ($File.BaseName -eq "items_redux")
+	if ($File.Name -eq "items_redux.png")
 	{
-  return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\items.xnb")
+		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\items.png")
 	}
-  if ($File.BaseName -eq "npcs_redux")
+	if ($File.Name -eq "npcs_redux.png")
 	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\npcs.xnb")
+		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\npcs.png")
 	}
-  if ($File.BaseName -eq "smallFont_redux")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
-	}
-  if ($File.BaseName -eq "smallFont_vwf")
+	if ($File.Name -eq "smallFont_redux.xnb")
 	{
 		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
 	}
-  if ($File.BaseName -eq "smallFont_vwf_redux")
+	if ($File.Name -eq "smallFont_vwf.xnb")
+	{
+		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
+	}
+	if ($File.Name -eq "smallFont_vwf_redux.xnb")
 	{
 		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
 	}
