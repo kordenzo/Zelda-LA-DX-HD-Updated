@@ -123,6 +123,16 @@ namespace LADXHD_Patcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] castle2_map_data {
+            get {
+                object obj = ResourceManager.GetObject("castle2.map.data", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] cave7_map {
             get {
                 object obj = ResourceManager.GetObject("cave7.map", resourceCulture);
