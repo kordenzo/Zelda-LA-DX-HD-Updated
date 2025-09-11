@@ -9,7 +9,7 @@ namespace LADXHD_Patcher
         public const string version = "1.2.3";
 
         public const string oldHash = "F4ADFBA864B852908705EA6A18A48F18";
-        public const string newHash = "8A7AA1A882F6216F7F130A98DE58F488";
+        public const string newHash = "5F14A6FD488970791508FB3E1F5BF79D";
 
         public static string appPath;
         public static string baseFolder;
