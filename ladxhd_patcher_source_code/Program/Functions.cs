@@ -11,8 +11,6 @@ namespace LADXHD_Patcher
         private static string Executable;
         private static string MD5Hash;
 
-
-
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         FILE MAPPING CODE : NOT ALL FILES AND PATCHES ARE 1:1 FROM ORIGINAL GAME VERSION. NEW FILES NEED A "BASE" TO BE CREATED FROM USING A PATCH
@@ -80,6 +78,8 @@ namespace LADXHD_Patcher
             {
                 FileItem fileItem = new FileItem(file);
 
+                HandleMultiFilePatches(fileItem);
+
                 if (fileItem.Name == "xdelta3.exe" || !resources.ContainsKey(fileItem.Name) || InBackup(fileItem))
                     continue;
 
@@ -89,8 +89,6 @@ namespace LADXHD_Patcher
                     backupFile.CopyPath(fileItem.FullName,true);
                 else
                     fileItem.FullName.CopyPath(backupFile, true);
-
-                HandleMultiFilePatches(fileItem);
 
                 string xdelta3File = Path.Combine((Config.tempFolder + "\\patches").CreatePath(), fileItem.Name + ".xdelta");
                 string patchedFile = Path.Combine((Config.tempFolder + "\\patchedFiles").CreatePath(), fileItem.Name);
