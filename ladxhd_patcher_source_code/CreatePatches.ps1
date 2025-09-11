@@ -1,8 +1,23 @@
 #========================================================================================================================================
+# LINK'S AWAKENING DX HD: XDELTA PATCH CREATOR FOR GAME PATCHER
+# By: Bighead
+#========================================================================================================================================
+# PURPOSE
+#========================================================================================================================================
+<#
+
+  The purpose of this script is to generate patches from v1.0.0 of Link's Awakening DX HD and whatever the latest version is. The
+  original release should be set to the "$OldGamePath" variable, the new release set to the "$NewGamePath" variable, and the version
+  should be set to the "$GameVersion" variable. After that, just run the script and it will generate all the necessary patches. From
+  there the patches can be imported into "Resources.resx" of the patcher source code and compiled into the resulting patcher.
+
+#>
+#========================================================================================================================================
 # INSTRUCTIONS
 #========================================================================================================================================
 <#
-  Info & Purpose:
+
+  Information:
   - Generate xdelta patches to update v1.0.0 or v1.1.4+ to the latest build.
   - XDelta3 patches must share a name with the file they are patching + ".xdelta" extension.
   - For example, the file "musicOverworld.data" the patch should be "musicOverworld.data.xdelta"
@@ -16,9 +31,9 @@
   - Set the paths to the games below in "CONFIGURATION."
   - Version 1.0.0 should be set to "OldGamePath".
   - The new build should be set to "NewGamePath".
+  - Set the "GameVersion" which will output to that folder in "Resources".
   - Right click this script, select "Run with PowerShell".
   - Generated patches can be found in the "Resources" folder.
-  - The folder in "Resources" uses the "$GameVersion" set below.
   - Obviously, the xdelta patches can be found in this folder.
 
   What to do with patches:
@@ -32,6 +47,7 @@
   Now what?:
   - Edit the version number in "Program >> Config" to set the new version of the game.
   - Build the project. This will create a new patcher. All patches are handled automatically.
+
 #>
 #========================================================================================================================================
 # CONFIGURATION
@@ -39,7 +55,7 @@
 
 $OldGamePath = "C:\Users\Bighead\source\repos\Zelda-LA-DX-HD_Stuff\original"
 $NewGamePath = "C:\Users\Bighead\source\repos\Zelda-LA-DX-HD_Stuff\updated"
-$GameVersion = "1.2.2"
+$GameVersion = "1.2.3"
 
 #========================================================================================================================================
 # SETUP XDELTA & OUTPUTS
@@ -52,11 +68,10 @@ $PatchFolder = Join-Path $BaseFolder ("\Resources\v" + $GameVersion + " Patches"
 #========================================================================================================================================
 # MISCELLANEOUS
 #========================================================================================================================================
-$host.UI.RawUI.WindowTitle = "Link's Awakening DX HD XDelta Patch Generation Script"
+$host.UI.RawUI.WindowTitle = "Link's Awakening DX HD: XDelta Patch Generation Script"
 
 function PauseBeforeClose
 {
-    Write-Host ""
     Write-Host "Press any key to close this window."
     [void][System.Console]::ReadKey()
     Exit
@@ -88,67 +103,49 @@ if (!(Test-Path $PatchFolder)) {
 }
 
 #========================================================================================================================================
-# CREATE LANGUAGE PATCHES FROM ENGLISH FILES
-#========================================================================================================================================
-$LanguageFiles  = @("esp","fre","ita","por","rus");
-$LanguageDialog = @("dialog_esp","dialog_fre","dialog_ita","dialog_por","dialog_rus");
-
-function CheckCreateLanguageFiles([object]$File)
-{
-    if (($File.Extension -eq ".lng") -and ($File.Name -notlike "*eng.lng"))
-    {
-        $RelativePath = $File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\')
-
-        if ($LanguageFiles.Contains($File.BaseName))
-        {
-            $EngPath = Join-Path $OldGamePath ($RelativePath + "\eng.lng")
-        }
-        elseif ($LanguageDialog.Contains($File.BaseName))
-        {
-            $EngPath = Join-Path $OldGamePath ($RelativePath + "\dialog_eng.lng")
-        }
-        $PatchFile = Join-Path $PatchFolder ($File.Name + ".xdelta")
-
-        Write-Host ("Generating patch for: " + $File.Name)
-        & $XDelta3 -f -e -s $EngPath $File.FullName $PatchFile
-        
-        return $true
-    }
-    return $false
-}
-#========================================================================================================================================
 # SPECIAL CASES
 #========================================================================================================================================
+
+$LangFiles  = @("esp.lng", "fre.lng", "ita.lng", "por.lng", "rus.lng")
+$LangDialog = @("dialog_esp.lng", "dialog_fre.lng", "dialog_ita.lng", "dialog_por.lng", "dialog_rus.lng")
+$SmallFonts = @("smallFont_redux.xnb", "smallFont_vwf.xnb", "smallFont_vwf_redux.xnb")
+$BackGround = @("menuBackgroundB.xnb", "menuBackgroundC.xnb")
+$NpcImages  = @("npcs_redux.png")
+$ItemImages = @("items_redux.png")
+
+$FileTargets = @{
+    "eng.lng"             = $LangFiles
+    "dialog_eng.lng"      = $LangDialog
+    "smallFont.xnb"       = $SmallFonts
+    "menuBackground.xnb"  = $BackGround
+    "npcs.png"            = $NpcImages
+    "items.png"           = $ItemImages
+}
+
+function Build-ReverseMap($Targets)
+{
+    $Reverse = @{}
+
+    foreach ($Key in $Targets.Keys) 
+	{
+        $ShortName = $Key
+        $LongNames = $Targets[$Key]
+
+        foreach ($LongName in $LongNames) 
+		{
+            $Reverse[$LongName.ToLower()] = $ShortName
+        }
+    }
+    return $Reverse
+}
+$ReverseFileTargets = Build-ReverseMap -Targets $FileTargets
+
 function GetOldFilePath([object]$File, [string]$RelativePath)
 {
-	if ($File.Name -eq "menuBackgroundB.xnb")
+    if ($ReverseFileTargets.ContainsKey($File.Name.ToLower())) 
 	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\menuBackground.xnb")
-	}	
-	if ($File.Name -eq "menuBackgroundC.xnb")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\menuBackground.xnb")
-	}	
-	if ($File.Name -eq "items_redux.png")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\items.png")
-	}
-	if ($File.Name -eq "npcs_redux.png")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\npcs.png")
-	}
-	if ($File.Name -eq "smallFont_redux.xnb")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
-	}
-	if ($File.Name -eq "smallFont_vwf.xnb")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
-	}
-	if ($File.Name -eq "smallFont_vwf_redux.xnb")
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\smallFont.xnb")
-	}
+		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\" + $ReverseFileTargets[$File.Name.ToLower()] )
+    }
 	return Join-Path $OldGamePath $RelativePath
 }
 
@@ -165,7 +162,6 @@ foreach ($file in Get-ChildItem -LiteralPath $NewGamePath -Recurse -File)
     $OldFilePath  = GetOldFilePath -File $file -RelativePath $RelativePath
     $NewFilePath  = $file.FullName
 
-    if (CheckCreateLanguageFiles -File $file) { continue };
     if (!(Test-Path -LiteralPath $OldFilePath)) { continue }
 
     $OldMD5 = (Get-FileHash -Path $OldFilePath -Algorithm MD5).Hash

@@ -11,6 +11,17 @@ namespace LADXHD_Patcher
         private static string Executable;
         private static string MD5Hash;
 
+
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        FILE MAPPING CODE : NOT ALL FILES AND PATCHES ARE 1:1 FROM ORIGINAL GAME VERSION. NEW FILES NEED A "BASE" TO BE CREATED FROM USING A PATCH
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+        // SOME RESOURCES ARE USED TO CREATE MULTIPLE FILES OR PATCHES. EACH ARRAY BELOW HOLDS ALL VERSIONS OF A FILE THAT IS
+        // BASED OFF OF ANOTHER FILE. THE "MASTER" FILE THAT CREATES THESE VERSIONS IS LINKED TO THEM IN THE DICTIONARY BELOW
+
         private static Dictionary<string, object> resources = ResourceHelper.GetAllResources();
 
         private static string[] langFiles  = new[] { "esp.lng", "fre.lng", "ita.lng", "por.lng", "rus.lng" };
@@ -19,6 +30,8 @@ namespace LADXHD_Patcher
         private static string[] backGround = new[] { "menuBackgroundB.xnb", "menuBackgroundC.xnb" };
         private static string[] npcImages  = new[] { "npcs_redux.png" };
         private static string[] itemImages = new[] { "items_redux.png" };
+
+        // THE "KEY" IS THE MASTER FILE THAT CREATES OTHER FILES FROM IT. THE "VALUE" IS THE STRING ARRAY THAT HOLDS THOSE FILES
 
         private static readonly Dictionary<string, string[]> fileTargets = new Dictionary<string, string[]>
         {
@@ -29,6 +42,13 @@ namespace LADXHD_Patcher
             { "npcs.png",            npcImages },
             { "items.png",          itemImages }
         };
+
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        PATCHING CODE : PATCH FILES USING XDELTA PATCHES FROM "Resources.resx" TO UPDATE TO THE LATEST VERSION.
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
         public static bool InBackup(FileItem fileItem)
         {
@@ -83,6 +103,12 @@ namespace LADXHD_Patcher
                 : "Patching Link's Awakening DX HD v1.0.0 was successful. The game was updated to v"+ Config.version + ".";
             Forms.okayDialog.Display("Patching Complete", 260, 40, 34, 16, 10, message);
         }
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        SETUP / VALIDATION CODE : SET UP WHETHER PATCHING FROM v1.0.0 OR PATCHING FROM BACKUP FILES AND VERIFY IF PATCHING SHOULD TAKE PLACE.
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
         private static void SetSourceFiles()
         {
