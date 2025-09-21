@@ -603,6 +603,16 @@ namespace LADXHD_Patcher {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] final_stairs_map {
+            get {
+                object obj = ResourceManager.GetObject("final stairs.map", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] fre_lng {
             get {
                 object obj = ResourceManager.GetObject("fre.lng", resourceCulture);
