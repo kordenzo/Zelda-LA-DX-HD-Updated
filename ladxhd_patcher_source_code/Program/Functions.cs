@@ -66,16 +66,20 @@ namespace LADXHD_Patcher
             return (fileItem.DirectoryName.IndexOf("Data\\Backup", StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        private static void RemoveBackupLangFiles()
+        private static void RemoveBadBackupFiles()
         {
-            string[] rem = new[] { "deu.lng", "esp.lng", "fre.lng", "ita.lng", "por.lng", "rus.lng", 
-                "dialog_deu.lng", "dialog_esp.lng", "dialog_fre.lng", "dialog_ita.lng", "dialog_por.lng", "dialog_rus.lng" };
+            // Because old versions of the patchers saved "new" files, we need to remove them or they will cause problems.
+            string[][] list = { langFiles, langDialog, smallFonts, backGround, npcImages, itemImages, 
+                                introImage, miniMapImg, objectsImg, photograph, uiImages };
+            string[] remove = list.SelectMany(x => x).ToArray();
 
+            // Loop through the files in the backup folder.
             foreach (string file in Config.backupPath.GetFiles("*", true))
             {
                 FileItem fileItem = new FileItem(file);
 
-                if (rem.Contains(fileItem.Name))
+                // If the current array file exists then remove it.
+                if (remove.Contains(fileItem.Name))
                     fileItem.FullName.RemovePath();
             }
         }
@@ -105,7 +109,7 @@ namespace LADXHD_Patcher
         private static void PatchGameFiles()
         {
             // Remove any garbage language files that will just mess up the patcher.
-            RemoveBackupLangFiles();
+            RemoveBadBackupFiles();
 
             foreach (string file in Config.baseFolder.GetFiles("*", true))
             {
@@ -140,7 +144,7 @@ namespace LADXHD_Patcher
                 XDelta3.Execute(Operation.Apply, fileItem.FullName, xdelta3File, patchedFile, fileItem.FullName);
             }
             // They will probably be there again so remove them one more time.
-            RemoveBackupLangFiles();
+            RemoveBadBackupFiles();
 
             string message = patchFromBackup 
                 ? "Patching the game from v1.0.0 backup files was successful. The game was updated to v"+ Config.version + "." 
