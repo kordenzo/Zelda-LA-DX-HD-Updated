@@ -1683,6 +1683,16 @@ namespace LADXHD_Patcher {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] d7_tower_top_1_ani {
+            get {
+                object obj = ResourceManager.GetObject("d7 tower top 1.ani", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] DamageShader_xnb {
             get {
                 object obj = ResourceManager.GetObject("DamageShader.xnb", resourceCulture);
