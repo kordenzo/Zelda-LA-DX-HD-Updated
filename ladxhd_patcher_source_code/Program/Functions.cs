@@ -21,8 +21,6 @@ namespace LADXHD_Patcher
         // SOME RESOURCES ARE USED TO CREATE MULTIPLE FILES OR PATCHES. EACH ARRAY BELOW HOLDS ALL VERSIONS OF A FILE THAT IS
         // BASED OFF OF ANOTHER FILE. THE "MASTER" FILE THAT CREATES THESE VERSIONS IS LINKED TO THEM IN THE DICTIONARY BELOW
 
-        private static Dictionary<string, object> resources = ResourceHelper.GetAllResources();
-
         private static string[] langFiles  = new[] { "deu.lng", "esp.lng", "fre.lng", "ind.lng", "ita.lng", "por.lng", "rus.lng" };
         private static string[] langDialog = new[] { "dialog_deu.lng", "dialog_esp.lng", "dialog_fre.lng", "dialog_ind.lng", "dialog_ita.lng", "dialog_por.lng", "dialog_rus.lng" };
         private static string[] smallFonts = new[] { "smallFont_redux.xnb", "smallFont_vwf.xnb", "smallFont_vwf_redux.xnb" };
@@ -93,15 +91,16 @@ namespace LADXHD_Patcher
             // Loop through the target file names.
             foreach (string newFile in targets)
             {
-                // Make sure a patch exists in the resources.resx file.
-                if (!resources.ContainsKey(newFile))
+                // Set up the path to the patch.
+                string xdelta3File = Path.Combine(Config.tempFolder + "\\patches", newFile + ".xdelta");
+
+                // Make sure a patch exists.
+                if (!xdelta3File.TestPath())
                     continue;
 
                 // If all has gone well, then patch the file to create a new file with a different name.
-                string xdelta3File = Path.Combine((Config.tempFolder + "\\patches").CreatePath(), newFile + ".xdelta");
-                string patchedFile = Path.Combine((Config.tempFolder + "\\patchedFiles").CreatePath(), newFile);
+                string patchedFile = Path.Combine(Config.tempFolder + "\\patchedFiles", newFile);
                 string newFilePath  = Path.Combine(fileItem.DirectoryName, newFile);
-                File.WriteAllBytes(xdelta3File, (byte[])resources[newFile]);
                 XDelta3.Execute(Operation.Apply, fileItem.FullName, xdelta3File, patchedFile, newFilePath);
             }
         }
@@ -120,10 +119,11 @@ namespace LADXHD_Patcher
                     continue;
 
                 // Get the backup path to test for existing backups and create new ones to it.
-                string backupPath = Path.Combine(Config.backupPath, fileItem.Name);
+                string backupPath  = Path.Combine(Config.backupPath, fileItem.Name);
+                string xdelta3File = Path.Combine(Config.tempFolder + "\\patches", fileItem.Name + ".xdelta");
 
                 // Backup file if it has patch and a backup doesn't exist or restore from backup if one does exist.
-                if (resources.ContainsKey(fileItem.Name))
+                if (xdelta3File.TestPath())
                     if (!backupPath.TestPath())
                         fileItem.FullName.CopyPath(backupPath, true);
                     else
@@ -134,13 +134,11 @@ namespace LADXHD_Patcher
                     HandleMultiFilePatches(fileItem);
 
                 // If this file is not patched directly then move on to the next.
-                if (!resources.ContainsKey(fileItem.Name))
+                if (!xdelta3File.TestPath())
                     continue;
 
                 // Patch the file.
-                string xdelta3File = Path.Combine((Config.tempFolder + "\\patches").CreatePath(), fileItem.Name + ".xdelta");
-                string patchedFile = Path.Combine((Config.tempFolder + "\\patchedFiles").CreatePath(), fileItem.Name);
-                File.WriteAllBytes(xdelta3File, (byte[])resources[fileItem.Name]);
+                string patchedFile = Path.Combine(Config.tempFolder + "\\patchedFiles", fileItem.Name);
                 XDelta3.Execute(Operation.Apply, fileItem.FullName, xdelta3File, patchedFile, fileItem.FullName);
             }
             // They will probably be there again so remove them one more time.
@@ -217,6 +215,7 @@ namespace LADXHD_Patcher
 
             Forms.mainDialog.ToggleDialog(false);
             Config.tempFolder.CreatePath(true);
+            ZipPatches.ExtractPatches();
 
             XDelta3.Create();
             PatchGameFiles();

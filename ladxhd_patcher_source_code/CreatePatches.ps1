@@ -55,7 +55,7 @@
 
 $OldGamePath = "C:\Users\Bighead\source\repos\Zelda-LA-DX-HD_Stuff\original"
 $NewGamePath = "C:\Users\Bighead\source\repos\Zelda-LA-DX-HD_Stuff\updated"
-$GameVersion = "1.4.5"
+$GameVersion = "1.4.6"
 
 #========================================================================================================================================
 # SETUP XDELTA & OUTPUTS
@@ -139,12 +139,12 @@ function Build-ReverseMap($Targets)
     $Reverse = @{}
 
     foreach ($Key in $Targets.Keys) 
-	{
+    {
         $ShortName = $Key
         $LongNames = $Targets[$Key]
 
         foreach ($LongName in $LongNames) 
-		{
+        {
             $Reverse[$LongName.ToLower()] = $ShortName
         }
     }
@@ -155,10 +155,10 @@ $ReverseFileTargets = Build-ReverseMap -Targets $FileTargets
 function GetOldFilePath([object]$File, [string]$RelativePath)
 {
     if ($ReverseFileTargets.ContainsKey($File.Name.ToLower())) 
-	{
-		return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\" + $ReverseFileTargets[$File.Name.ToLower()] )
+    {
+        return Join-Path $OldGamePath ($File.DirectoryName.Substring($OldGamePath.Length).TrimStart('\') + "\" + $ReverseFileTargets[$File.Name.ToLower()] )
     }
-	return Join-Path $OldGamePath $RelativePath
+    return Join-Path $OldGamePath $RelativePath
 }
 
 #========================================================================================================================================
