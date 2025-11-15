@@ -58,7 +58,7 @@ namespace LADXHD_Patcher
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        PATCHING CODE : PATCH FILES USING XDELTA PATCHES FROM "Resources.resx" TO UPDATE TO THE LATEST VERSION.
+        BAD BACKUPS: OLD PATCHER VERSIONS KEPT AROUND PATCHED FILES IN THE BACKUP FOLDER, WHICH MESSES UP THE PATCHER. BACKUP FOLDER IS FOR v1.0.0 FILES ONLY.
        
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -72,7 +72,7 @@ namespace LADXHD_Patcher
         {
             // Because old versions of the patchers saved "new" files, we need to remove them or they will cause problems.
             string[][] list = { langFiles, langDialog, smallFonts, backGround, npcImages, itemImages, 
-                                introImage, miniMapImg, objectsImg, photograph, uiImages };
+                                introImage, miniMapImg, objectsImg, photograph, uiImages, dungeon3M, dungeon3D };
             string[] remove = list.SelectMany(x => x).ToArray();
 
             // Loop through the files in the backup folder.
@@ -85,6 +85,40 @@ namespace LADXHD_Patcher
                     fileItem.FullName.RemovePath();
             }
         }
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        OBSOLETE FILES: SOME FILES IN THE GAME FOLDER HAVE BEEN MADE OBSOLETE AND MAY EVEN CAUSE PROBLEMS IF THEY REMAIN.
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+        private static string[] obsoleteFiles = new[] 
+        {  
+            "cave bird.map.data", "dungeon_end.map.data", "dungeon3_1.map", "dungeon3_1.map.data", "dungeon3_2.map", "dungeon3_2.map.data", "dungeon3_3.map", "dungeon3_3.map.data", "dungeon3_4.map", 
+            "dungeon3_4.map.data", "dungeon 7_2d.map.data", "three_1.txt", "three_2.txt", "three_3.txt" 
+        };
+
+        private static void RemoveObsolete()
+        {
+            foreach (string file in Config.baseFolder.GetFiles("*", true))
+            {
+                FileItem fileItem = new FileItem(file);
+
+                // Skip backup files for safety.
+                if (InBackup(fileItem))
+                    continue;
+
+                // If the obsolete file exists then delete it.
+                if (obsoleteFiles.Contains(fileItem.Name))
+                    fileItem.FullName.RemovePath();
+            }
+        }
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        PATCHING CODE : PATCH FILES USING XDELTA PATCHES FROM "Resources.resx" TO UPDATE TO THE LATEST VERSION.
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
         private static void HandleMultiFilePatches(FileItem fileItem)
         {
@@ -111,7 +145,7 @@ namespace LADXHD_Patcher
 
         private static void PatchGameFiles()
         {
-            // Remove any garbage language files that will just mess up the patcher.
+            // Remove any garbage files that will just mess up the patcher.
             RemoveBadBackupFiles();
 
             foreach (string file in Config.baseFolder.GetFiles("*", true))
@@ -147,6 +181,9 @@ namespace LADXHD_Patcher
             }
             // They will probably be there again so remove them one more time.
             RemoveBadBackupFiles();
+
+            // Now is a good time to remove any files that the game no longer needs or may cause problems.
+            RemoveObsolete();
 
             string message = patchFromBackup 
                 ? "Patching the game from v1.0.0 backup files was successful. The game was updated to v"+ Config.version + "." 
