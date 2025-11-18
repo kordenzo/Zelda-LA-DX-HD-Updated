@@ -10,7 +10,6 @@ namespace LADXHD_Patcher
     {
         private static bool patchFromBackup;
         private static string Executable;
-        private static string MD5Hash;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -204,7 +203,6 @@ namespace LADXHD_Patcher
             Executable = patchFromBackup
                 ? backupExe
                 : Config.zeldaEXE;
-            MD5Hash = Executable.CalculateHash("MD5");
         }
 
         private static bool ValidateExist()

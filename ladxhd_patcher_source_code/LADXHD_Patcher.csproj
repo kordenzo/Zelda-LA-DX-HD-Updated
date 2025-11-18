@@ -101,6 +101,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <CustomToolNamespace>LADXHD_Patcher</CustomToolNamespace>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
