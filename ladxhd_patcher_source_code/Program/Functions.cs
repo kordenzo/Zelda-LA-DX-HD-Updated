@@ -24,6 +24,7 @@ namespace LADXHD_Patcher
         private static string[] langDialog = new[] { "dialog_deu.lng", "dialog_esp.lng", "dialog_fre.lng", "dialog_ind.lng", "dialog_ita.lng", "dialog_por.lng", "dialog_rus.lng" };
         private static string[] smallFonts = new[] { "smallFont_redux.xnb", "smallFont_vwf.xnb", "smallFont_vwf_redux.xnb" };
         private static string[] backGround = new[] { "menuBackgroundB.xnb", "menuBackgroundC.xnb", "sgb_border.xnb" };
+        private static string[] linkImages = new[] { "link1.png" };
         private static string[] npcImages  = new[] { "npcs_redux.png" };
         private static string[] itemImages = new[] { "items_deu.png", "items_esp.png", "items_fre.png", "items_ind.png", "items_ita.png", "items_por.png", "items_rus.png", "items_redux.png", 
                                                      "items_redux_deu.png", "items_redux_esp.png", "items_redux_fre.png", "items_redux_ind.png", "items_redux_ita.png", "items_redux_por.png", "items_redux_rus.png" };
@@ -45,6 +46,7 @@ namespace LADXHD_Patcher
             { "dialog_eng.lng",     langDialog },
             { "smallFont.xnb",      smallFonts },
             { "menuBackground.xnb", backGround },
+            { "link0.png",          linkImages },
             { "npcs.png",            npcImages },
             { "items.png",          itemImages },
             { "intro.png",          introImage },
@@ -72,7 +74,7 @@ namespace LADXHD_Patcher
         private static void RemoveBadBackupFiles()
         {
             // Because old versions of the patchers saved "new" files, we need to remove them or they will cause problems.
-            string[][] list = { langFiles, langDialog, smallFonts, backGround, npcImages, itemImages, introImage, 
+            string[][] list = { langFiles, langDialog, smallFonts, backGround, linkImages, npcImages, itemImages, introImage, 
                                 miniMapImg, objectsImg, photograph, uiImages, musicTile, dungeon3M, dungeon3D };
 
             string[] remove = list.SelectMany(x => x).ToArray();

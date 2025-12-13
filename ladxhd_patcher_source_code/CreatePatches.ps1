@@ -110,6 +110,7 @@ $langFiles  = @("deu.lng", "esp.lng", "fre.lng", "ind.lng", "ita.lng", "por.lng"
 $langDialog = @("dialog_deu.lng", "dialog_esp.lng", "dialog_fre.lng", "dialog_ind.lng", "dialog_ita.lng", "dialog_por.lng", "dialog_rus.lng")
 $smallFonts = @("smallFont_redux.xnb", "smallFont_vwf.xnb", "smallFont_vwf_redux.xnb")
 $backGround = @("menuBackgroundB.xnb", "menuBackgroundC.xnb", "sgb_border.xnb")
+$linkImages = @("link1.png")
 $npcImages  = @("npcs_redux.png")
 $itemImages = @("items_deu.png", "items_esp.png", "items_fre.png", "items_ind.png", "items_ita.png", "items_por.png", "items_rus.png", "items_redux.png", 
                 "items_redux_deu.png", "items_redux_esp.png", "items_redux_fre.png", "items_redux_ind.png", "items_redux_ita.png", "items_redux_por.png", "items_redux_rus.png")
@@ -128,6 +129,7 @@ $FileTargets = @{
     "dialog_eng.lng"      = $langDialog
     "smallFont.xnb"       = $smallFonts
     "menuBackground.xnb"  = $backGround
+    "link0.png"           = $linkImages
     "npcs.png"            = $npcImages
     "items.png"           = $itemImages
     "intro.png"           = $introImage
