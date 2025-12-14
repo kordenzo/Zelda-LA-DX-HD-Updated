@@ -62,7 +62,7 @@ Again, make sure you are grabbing the correct Content and Data folders. The "Dat
 
 If you wish to work on the code in this repository.
 - Basic knowledge of C# .NET and Visual Studio is required.
-- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)
+- [Visual Studio 2026](https://visualstudio.microsoft.com/downloads/)
     - Make sure to select `.NET desktop development` components in the visual studio installer.
 - The "base" game should remain as close to the original DX version as possible.
 - Modifications are okay in the form of options, but should default to **<ins>false</ins>**.
@@ -72,7 +72,7 @@ If you wish to work on the code in this repository.
 
 Do not make pull requests providing assets directly. This includes ALL files within the **Content** and **Data** folders. Instead, use the **LADXHD Migrater** tool provided to create xdelta patches. These patches can then be applied to the original assets to update them to the latest versions also using the migration tool.
 
-See the wiki page on [contributing to this project](https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated/wiki/Contributing-to-this-project) for more information.
+See the wiki page on [contributing to this project](https://github.com/kordenzo/Zelda-LA-DX-HD-Updated/wiki/Contributing-to-this-project) for more information.
 
 ## Build Instructions
 
@@ -83,13 +83,13 @@ If you wish to build the code in this repository.
 - Run the PowerShell script "Unblock-All-Files.ps1".
   - -OR- Go to the folder `ladxhd_game_source_code\.config` you will see `dotnet-tools.json`.
   - -AND- Right click, go to properties, check `Unblock`.
-- Open ProjectZ.sln
+- Open ProjectZ.slnx
 - Build/run like any normal C# program
 
 ## Personal Build / Publishing
 
 To create a personal build, follow the steps below:
-- Download and install [.NET v6.0.428 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-6.0.428-windows-x64-installer).
+- Download and install [.NET v10.0.101 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-10.0.101-windows-x64-installer).
 - Clone or Download this repository: green `Code` Button > `Download ZIP`
 - Unzip the repository and open up the unzipped folder.
 - Follow the steps in **Updating Source Code Assets**
