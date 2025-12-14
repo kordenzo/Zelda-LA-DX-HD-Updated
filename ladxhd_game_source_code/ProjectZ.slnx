@@ -1,12 +1,15 @@
 <Solution>
   <Configurations>
     <Platform Name="Any CPU" />
-    <Platform Name="x86" />
+    <Platform Name="x64" />
   </Configurations>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
-  <Project Path="ProjectZ.csproj" />
+  <Project Path="ProjectZ.csproj">
+    <BuildType Solution="Debug|x64" Project="Release" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
   <Properties Name="Performance">
     <Property Name="HasPerformanceSessions" Value="true" />
   </Properties>
