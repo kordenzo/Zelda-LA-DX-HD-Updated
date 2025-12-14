@@ -5,7 +5,7 @@
 To use this fork, whether to play the game or build upon, it requires the user to provide the assets from the original v1.0.0 release.   
 Some assets have been updated, but I have created tooling to make migration easier.
 
-- This is a fork based on BigheadSMZ's Zelda-LA-DX-HD-Updated repo(https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated).
+- This is a fork based on BigheadSMZ's Zelda-LA-DX-HD-Updated repo (https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated).
 - See the [manual](https://github.com/kordenzo/Zelda-LA-DX-HD-Updated/blob/main/MANUAL.md) to learn more about the game (WIP).
 - See the [changelog](https://github.com/kordenzo/Zelda-LA-DX-HD-Updated/blob/main/CHANGELOG.md) for a list of changes from v1.0.0.
 
