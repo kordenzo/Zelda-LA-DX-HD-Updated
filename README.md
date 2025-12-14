@@ -5,17 +5,13 @@
 To use this fork, whether to play the game or build upon, it requires the user to provide the assets from the original v1.0.0 release.   
 Some assets have been updated, but I have created tooling to make migration easier.
 
-- This is a continuation of my [previous fork](https://github.com/BigheadSMZ/Links-Awakening-DX-HD) and here's a link to the [commits](https://github.com/BigheadSMZ/Links-Awakening-DX-HD/commits/master/).
-- See the [manual](https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated/blob/main/MANUAL.md) to learn more about the game (WIP).
-- See the [changelog](https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated/blob/main/CHANGELOG.md) for a list of changes from v1.0.0.
-- As of v1.1.0, the game is in a really good state and the "feel" is really close to the original game.  
-- As of v1.2.0, the vast majority of bugs have been fixed and features from the [Redux romhack](https://github.com/ShadowOne333/Links-Awakening-Redux) were implemented.
-- As of v1.3.0, I consider the work that I've done to be "feature complete" and everything from this point is gravy.
-- As of v1.4.0, the gravy train never stopped and so much has been done to make this port more accurate to the original games.
+- This is a fork based on BigheadSMZ's Zelda-LA-DX-HD-Updated repo(https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated).
+- See the [manual](https://github.com/kordenzo/Zelda-LA-DX-HD-Updated/blob/main/MANUAL.md) to learn more about the game (WIP).
+- See the [changelog](https://github.com/kordenzo/Zelda-LA-DX-HD-Updated/blob/main/CHANGELOG.md) for a list of changes from v1.0.0.
 
 ## Patching v1.0.0 (or v1.1.4+) to v1.4.9.
 
-To download the latest update, there is a patcher on the [Releases](https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated/releases) page. 
+To download the latest update, there is a patcher on the [Releases](https://github.com/kordenzo/Zelda-LA-DX-HD-Updated/releases) page. 
 If you wish to build the game yourself, see **Personal Build / Publishing**.
 - Find the v1.0.0 release originally from itch.io.
 - If you can not find it, you can search for an "archive" of it.
@@ -109,6 +105,4 @@ If you experience the error **The command “dotnet tool restore” exited with 
 
 ## About This Fork
 
-I am a terrible programmer, but I have a love for this game. A ton of forks popped up, some with fixes, but nowhere were they all centralized. This fork attempted to find and implement all the various fixes and improvements spread across the other various forks. Once that was done, I started tackling the issues from the repository this was cloned from. And after that was done, I worked on anything else I could find that would make the game feel more like the original game.
-
-Feel free to commit any potential fixes as a PR. There are no coding guidelines and any style is welcome as long as the code either fixes something broken or makes the game behave closer to the original. But do try to at least keep it neat.
+This is a fork based on https://github.com/BigheadSMZ/Zelda-LA-DX-HD-Updated.
