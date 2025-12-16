@@ -4,6 +4,7 @@
     {
         // Game Settings
         public static int     MenuBorder      =  0;
+        public static bool    ClassicSword    =  false;
         public static bool    StoreSavePos    =  false;
         public static int     LastSavePos     =  0;
         public static bool    Autosave        =  true;
@@ -53,6 +54,7 @@
         // Modifiers Settings
         public static int     EnemyBonusHP    =  0;
         public static int     DmgMultiplier   =  0;
+        public static int     DmgCooldown     =  16;
         public static float   MoveSpeedAdded  =  0;
         public static bool    NoDamageLaunch  =  false;
         public static bool    NoHeartDrops    =  false;

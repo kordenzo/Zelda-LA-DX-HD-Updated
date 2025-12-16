@@ -203,8 +203,10 @@ namespace ProjectZ.InGame.GameObjects
         public CBox DamageCollider;
         private Vector2 _hitVelocity;
 
-        public const int BlinkTime = 66;
-        public const int CooldownTime = BlinkTime * 16;
+
+        public static int BlinkTime = 66;
+        public static int CooldownTime = BlinkTime * GameSettings.DmgCooldown;
+
 
         private double _hitCount;
         private double _hitRepelTime;
@@ -1796,7 +1798,7 @@ namespace ProjectZ.InGame.GameObjects
             return HitPlayer(vecDirection * pushMultiplier, type, damage, blocked);
         }
 
-        public bool HitPlayer(Vector2 direction, HitType type, int damage, bool blocked, int damageCooldown = CooldownTime)
+        public bool HitPlayer(Vector2 direction, HitType type, int damage, bool blocked, int damageCooldown = 0)
         {
             // Check conditions where the player wouldn't take damage.
             if (_hitCount > 0 || CurrentState == State.Dying || CurrentState == State.PickingUp ||
@@ -1839,7 +1841,12 @@ namespace ProjectZ.InGame.GameObjects
 
             Game1.GameManager.PlaySoundEffect("D370-03-03");
 
-            _hitCount = damageCooldown;
+            // Use the calculated cooldown if not set by an external call.
+            if (damageCooldown != 0)
+                _hitCount = damageCooldown;
+            else
+                _hitCount = CooldownTime;
+
             Game1.GameManager.InflictDamage(damage);
 
             // Shake the screen on damage if the user has it enabled.
@@ -2124,16 +2131,18 @@ namespace ProjectZ.InGame.GameObjects
 
                 // colliding horizontally or vertically? -> start pushing
                 if (CurrentState == State.Idle &&
-                        _body.IsGrounded && (_body.Velocity != Vector3.Zero || _body.VelocityTarget != Vector2.Zero) &&
-                        ((collision & Values.BodyCollision.Horizontal) != 0 && (Direction == 0 || Direction == 2) ||
-                        (collision & Values.BodyCollision.Vertical) != 0 && (Direction == 1 || Direction == 3)))
+                    _body.IsGrounded && (_body.Velocity != Vector3.Zero || _body.VelocityTarget != Vector2.Zero) &&
+                    ((collision & Values.BodyCollision.Horizontal) != 0 && (Direction == 0 || Direction == 2) ||
+                    (collision & Values.BodyCollision.Vertical) != 0 && (Direction == 1 || Direction == 3)))
                 {
                     var box = _body.BodyBox.Box;
+
                     // offset by one in the walk direction
                     box.X += AnimationHelper.DirectionOffset[Direction].X;
                     box.Y += AnimationHelper.DirectionOffset[Direction].Y;
                     var cBox = Box.Empty;
                     var outBox = Box.Empty;
+
                     // check if the object we are walking into is actually an object where the push animation should be played
                     if (Map.Objects.Collision(box, cBox, _body.CollisionTypes, Values.CollisionTypes.PushIgnore, Direction, _body.Level, ref outBox))
                         CurrentState = State.Pushing;
@@ -3572,10 +3581,11 @@ namespace ProjectZ.InGame.GameObjects
                 var hitType = Game1.GameManager.SwordLevel == 1 ? HitType.Sword1 : HitType.Sword2;
                 var damage = Game1.GameManager.SwordLevel == 1 ? 1 : 2;
 
-                // red cloak doubles damage
+                // Red cloak doubles damage.
                 if (Game1.GameManager.CloakType == GameManager.CloakRed)
                     damage *= 2;
-                // piece of power double the damage
+
+                // Piece of power doubles the damage.
                 if (Game1.GameManager.PieceOfPowerIsActive)
                     damage *= 2;
 
@@ -3591,7 +3601,7 @@ namespace ProjectZ.InGame.GameObjects
                     _isHoldingSword = false;
                     return;
                 }
-                // start poking?
+                // Start poking?
                 if (hitCollision != Values.HitCollision.None &&
                     hitCollision != Values.HitCollision.NoneBlocking)
                 {
@@ -3624,7 +3634,7 @@ namespace ProjectZ.InGame.GameObjects
                 {
                     _swordChargeCounter -= Game1.DeltaTime;
 
-                    // finished charging?
+                    // Finished charging?
                     if (_swordChargeCounter <= 0)
                         Game1.GameManager.PlaySoundEffect("D360-04-04");
                 }
@@ -3645,9 +3655,7 @@ namespace ProjectZ.InGame.GameObjects
                     }
                     // Otherwise return to idle state.
                     else
-                    {
                         ReturnToIdle();
-                    }
                 }
             }
             // Probably a hacky way of updating the sword position while swimming in 2D mode.
@@ -3675,26 +3683,88 @@ namespace ProjectZ.InGame.GameObjects
             _isSwordSpinning = true;
         }
 
+        public bool ClassicSword { get => GameSettings.ClassicSword && !_isSwordSpinning; }
+
+        private static Box GetSwordClassicTile(Box box)
+        {
+            const int TileSize = 16;
+
+            // Use center point of the box.
+            float centerX = box.X + box.Width  * 0.5f;
+            float centerY = box.Y + box.Height * 0.5f;
+
+            int tileX = (int)Math.Floor(centerX / TileSize);
+            int tiley = (int)Math.Floor(centerY / TileSize);
+
+            return new Box(tileX * TileSize, tiley * TileSize, box.Z, TileSize, TileSize, box.Depth);
+        }
+
         private void UpdateAttacking()
         {
+            // If the player is dashing, hold the sword out front.
             if (_bootsRunning && CarrySword)
                 AnimatorWeapons.Play("stand_" + Direction);
 
+            // If the sword is not out just exit.
             if (AnimatorWeapons.CollisionRectangle.IsEmpty)
                 return;
 
+            // Get the damage origin point.
             var damageOrigin = BodyRectangle.Center;
             if (Map.Is2dMap)
                 damageOrigin.Y -= 4;
 
-            RectangleF collisionRectangle = AnimatorWeapons.CollisionRectangle;
+            // Get the base damage type of hit to try to hit enemies with.
+            var hitType = _bootsRunning 
+                ? HitType.PegasusBootsSword 
+                : Game1.GameManager.SwordLevel == 1 
+                    ? HitType.Sword1 
+                    : HitType.Sword2;
 
-            // This lerps the collision box between frames.
+            // Get the base damage depending on the sword's level.
+            var damage = Game1.GameManager.SwordLevel == 1 ? 1 : 2;
+
+            // If it's a sword spin, double the damage and add "SwordSpin" damage type.
+            if (_isSwordSpinning)
+            {
+                damage *= 2;
+                hitType |= HitType.SwordSpin;
+            }
+            // If the player is dashing with boots, double the damage again.
+            if (_bootsRunning)
+                damage *= 2;
+
+            // If the player has a piece of power, double the damage again.
+            if (Game1.GameManager.PieceOfPowerIsActive)
+                damage *= 2;
+
+            // If the player has the red tunic, double the damage yet again.
+            if (Game1.GameManager.CloakType == GameManager.CloakRed)
+                damage *= 2;
+
+            // Track if a "Piece of Power" is active or if the red tunic is equipped. This is used for the "damage launch" effect.
+            var pieceOfPower = Game1.GameManager.PieceOfPowerIsActive || Game1.GameManager.CloakType == GameManager.CloakRed;
+
+            // Get the sword's damage box using the sprite's animation rectangle.
+            RectangleF collisionRectangle = AnimatorWeapons.CollisionRectangle;
+            SwordDamageBox = GetSwordDamageBox(collisionRectangle);
+            var ClassicBox = Box.Empty;
+
+            // If "Classic Sword" is enabled get the tile the sword overlaps with the most.
+            if (ClassicSword)
+            {
+                // Only the final frame can hit.
+                if (AnimatorWeapons.CurrentFrameIndex == 2)
+                {
+                    // Reduce it to the single dominant tile.
+                    ClassicBox = GetSwordClassicTile(SwordDamageBox);
+                }
+            }
+            // For the "normal" hit lerp the collision box between the three frames of the attack.
             if (AnimatorWeapons.CurrentAnimation.Frames.Length > AnimatorWeapons.CurrentFrameIndex + 1)
             {
                 var frameState = (float)(AnimatorWeapons.FrameCounter / AnimatorWeapons.CurrentFrame.FrameTime);
-                var collisionRectangleNextFrame = AnimatorWeapons.GetCollisionBox(
-                    AnimatorWeapons.CurrentAnimation.Frames[AnimatorWeapons.CurrentFrameIndex + 1]);
+                var collisionRectangleNextFrame = AnimatorWeapons.GetCollisionBox(AnimatorWeapons.CurrentAnimation.Frames[AnimatorWeapons.CurrentFrameIndex + 1]);
 
                 collisionRectangle = new RectangleF(
                     MathHelper.Lerp(collisionRectangle.X, collisionRectangleNextFrame.X, frameState),
@@ -3702,30 +3772,15 @@ namespace ProjectZ.InGame.GameObjects
                     MathHelper.Lerp(collisionRectangle.Width, collisionRectangleNextFrame.Width, frameState),
                     MathHelper.Lerp(collisionRectangle.Height, collisionRectangleNextFrame.Height, frameState));
             }
-            SwordDamageBox = GetSwordDamageBox(collisionRectangle);
-
-            var hitType = _bootsRunning ? HitType.PegasusBootsSword :
-                (Game1.GameManager.SwordLevel == 1 ? HitType.Sword1 : HitType.Sword2);
-
-            var damage = Game1.GameManager.SwordLevel == 1 ? 1 : 2;
-
-            if (_isSwordSpinning)
-            {
-                damage *= 2;
-                hitType |= HitType.SwordSpin;
-            }
-            if (_bootsRunning)
-                damage *= 2;
-
-            if (Game1.GameManager.PieceOfPowerIsActive)
-                damage *= 2;
-
-            if (Game1.GameManager.CloakType == GameManager.CloakRed)
-                damage *= 2;
-
-            var pieceOfPower = Game1.GameManager.PieceOfPowerIsActive || Game1.GameManager.CloakType == GameManager.CloakRed;
+            // Try to hit enemies with the "normal" hit. This fires whether "Classic Sword" is enabled or not.
             var hitCollision = Map.Objects.Hit(this, damageOrigin, SwordDamageBox, hitType, damage, pieceOfPower, out var direction, true);
 
+            // If "Classic Sword" is enabled, also hit with "ClassicSword" damage type. This will only try to
+            // hit bushes, grass, and crystals. Bombs will also not react to this or the sword hit type if enabled.
+            if (ClassicSword && !ClassicBox.IsEmpty)
+                Map.Objects.Hit(this, damageOrigin, ClassicBox, HitType.ClassicSword, damage, pieceOfPower, out var directionB, true);
+
+            // If the player is poking with the sword.
             if (_pokeStart)
             {
                 _pokeStart = false;
